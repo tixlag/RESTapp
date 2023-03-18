@@ -28,10 +28,29 @@ public class User implements UserDetails {
     private String password;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {};
+
+    public User(Long id, String name, String lastName, Byte age, String username, String password) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(Long id, String name, String lastName, Byte age, String username, String password, Set<Role> roles) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public User(String name, String lastName, byte age) {
         this.name = name;

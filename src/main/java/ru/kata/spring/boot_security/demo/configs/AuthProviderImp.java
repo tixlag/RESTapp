@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+
+
 @Component
 public class AuthProviderImp implements AuthenticationProvider {
 

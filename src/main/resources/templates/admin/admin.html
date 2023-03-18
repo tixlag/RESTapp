@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <!--    Никак не могу подключить css ='(-->
 
   <link rel="stylesheet" type="text/css" href="/res/css/users.css" th:href="@{../res/css/users.css}" media="all">
   <script src="/res/js/users.js" th:src="@{../res/js/users.js}" defer></script>
@@ -33,13 +32,14 @@
       <td class="password" contenteditable="true" th:text="${user.getPassword()}">series</td>
 
 
-      <td class="roles_cell"></td>
-          <select class="roles" multiple="multiple">
-            <option th:each="role : ${user.getRoles()}"
-                    th:value="${role.getAuthority()}"
-                    th:text="${role.getAuthority()}">
-            </option>
-          </select>
+      <td style="align:center" class="roles_cell">
+
+      <input style="width:100%" type="checkbox" name="roles"
+             th:each="role : ${defRoles}"
+             th:text="${role.authority}"
+             th:value="${role.id}"
+             th:checked="${#lists.contains(user.roles, role)}"
+      />
       </td>
 
       <td class="save"><button class="save_btn">Save</button></td>
@@ -49,7 +49,7 @@
   </table>
 <br/>
   <hr/>
-<form th:action="@{/new}" th:object="${user}" method="POST" style="
+<form th:action="@{admin/new}" th:object="${newUser}" method="POST" style="
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -57,21 +57,43 @@
 ">
 
   <label> Name:
-    <input name="name">
+    <input name="name" th:field="*{name}">
   </label>
-
   <br/>
-
   <label> Lastname:
-    <input name="lastName">
+    <input name="lastName" th:field="*{lastName}">
   </label>
-
   <br/>
-
   <label> Age:
-    <input name="age">
+    <input name="age" th:field="*{age}">
   </label>
   <br/>
+  <label> Username:
+    <input name="Username" th:field="*{username}">
+  </label>
+
+  <br/>
+
+  <label> Password:
+    <input name="Password" th:field="*{password}">
+  </label>
+
+  <br/>
+
+    <p>
+      <label>Roles:
+        <input type="checkbox" name="roles"
+               th:each="role : ${defRoles}"
+               th:text="${role.authority}"
+               th:value="${role.id}"
+               th:field="*{roles}"
+        />
+      </label>
+    </p>
+
+
+  <br/>
+
   <input type="submit" value="Add user" />
 
 </form>

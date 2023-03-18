@@ -1,12 +1,15 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImp implements UserDao {
@@ -22,8 +25,7 @@ public class UserDaoImp implements UserDao {
     @Override
     public User get(int id) {
 //        return manager.getObject() .createQuery("from User", User.class).getSingleResult();
-        manager.createQuery("from User");
-        return null;
+        return manager.find(User.class, id);
     }
 
     @Override
@@ -38,12 +40,19 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void edit(Long id, String name, String lastName, byte age,
-                     String username, String password, Set<>) {
+                     String username, String password, Set<Role> roles) {
         User currentUser = manager.find(User.class, id);
         currentUser.setName(name);
         currentUser.setLastName(lastName);
         currentUser.setAge(age);
-        currentUser.setUsername();
+        currentUser.setUsername(username);
+        currentUser.setPassword(password);
+        currentUser.setRoles(roles);
+    }
+
+    @Override
+    public void edit(User user) {
+        manager.merge(user);
     }
 
     @Override

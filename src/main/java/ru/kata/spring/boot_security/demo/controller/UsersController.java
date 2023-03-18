@@ -8,16 +8,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 //@RequestMapping("/users")
 public class UsersController {
 
-    @Autowired
+    final
     UserService userService;
+    final
+    RoleService roleService;
 
-    @GetMapping("/index")
+    @Autowired
+    public UsersController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @GetMapping("/")
     public String index() {
         return "index";
     }
@@ -25,49 +39,62 @@ public class UsersController {
     @GetMapping("/user")
     public String viewUser(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.isAuthenticated()) {
+//        if (auth.isAuthenticated()) {
             model.addAttribute("user", auth.getPrincipal());
             return "user";
-        } else {
-            model.addAttribute("msg", "А логиниться кто будет???");
-            return "403";
-        }
+//        } else {
+//            model.addAttribute("msg", "А логиниться кто будет???");
+//            return "403";
+//        }
     }
 
     @GetMapping("/admin")
-    public String users(ModelMap model) {
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains("ADMIN")) {
-            model.addAttribute("users", userService.getAll());
-            return "admin";
-        } else {
-            model.addAttribute("msg", "Низя сюды юзерам.");
-            return "403";
-        }
+    public String adminPanel(ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        model.addAttribute("users", userService.getAll());
+
+        model.addAttribute("newUser", new User());
+        model.addAttribute("defRoles", roleService.getAll());
+        return "/admin/admin";
+
     }
 
     // ??? @RequestBody не работает у меня никак
 
     @PostMapping("/admin/new")
-    public String addUser(@RequestParam("name") String name,
-                          @RequestParam("lastName") String lastName,
-                          @RequestParam("age") byte age, @ModelAttribute User user, ModelMap model) {
-        // ??? Это плохо, что я здесь из модели юзера создаю?
-        userService.add(new User(name, lastName, age));
-        return "redirect:/admin";
+    public void addUser(HttpServletResponse httpServletResponse,
+                        @ModelAttribute  User newUser,
+                        ModelMap model) throws IOException {
+//        userService.addWithRoles(user, roles);
+        userService.addWithHiddenRoles(newUser);
+        httpServletResponse.setStatus(200);
+        httpServletResponse.sendRedirect("/admin");
     }
 
-    @PatchMapping("/edit/")
-    public String editUser(@RequestParam("user_id") Long id, @RequestParam("name") String name,
+    @PatchMapping("/admin/edit/")
+    public void editUser(HttpServletResponse httpServletResponse,
+                         @RequestParam("user_id") Long id, @RequestParam("name") String name,
                            @RequestParam("last_name") String lastName,
-                           @RequestParam("age") Byte age) {
-        userService.edit(id, name, lastName, age);
-        return "redirect:/admin";
+                           @RequestParam("age") Byte age, @RequestParam String username, @RequestParam String password, @RequestParam String[] roles) {
+        userService.edit(id, name, lastName, age, username, password, roles);
+        httpServletResponse.setStatus(200);
     }
 
-    @DeleteMapping("/edit/")
-    public String deleteUser(@RequestParam("user_id") Long id) {
+    @DeleteMapping("/admin/edit")
+    public void deleteUser(HttpServletResponse httpServletResponse, @RequestParam("user_id") Long id) throws IOException {
         userService.delete(id);
-        return "admin";
+        httpServletResponse.setStatus(200);
+//        httpServletResponse.sendRedirect("/admin");
+//        return "redirect:/admin";
+    }
+
+    // @ModelAttribute получает пустого юзера.
+    // В js 79 строка. По разному пробовал - не выходит
+    @PatchMapping("/admin/edit2/")
+    public String editUserr(@ModelAttribute User user, @RequestParam String[] roles) {
+        userService.edit(user);
+        return "redirect:/admin";
     }
 
 }
