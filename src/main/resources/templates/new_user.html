@@ -86,7 +86,7 @@
                                                 <span
                                                         th:each="role, itemStat : ${this_user.getRoles()}"
                                                         th:text="${itemStat.last ? role.getSimpleName() : role.getSimpleName() + ', '}"
-                                                ></span>
+                                                />
                     </td>
                   </tr>
                   </tbody>

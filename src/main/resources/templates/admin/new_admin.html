@@ -39,11 +39,13 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a aria-controls="users_table" aria-selected="true" class="nav-link active" data-toggle="tab" href="#users_table"
+                    <a aria-controls="users_table" aria-selected="true" class="nav-link active" data-toggle="tab"
+                       href="#users_table"
                        id="users_table-tab" role="tab">Users table</a>
                 </li>
                 <li class="nav-item">
-                    <a aria-controls="new_user" aria-selected="false" class="nav-link" data-toggle="tab" href="#new_user"
+                    <a aria-controls="new_user" aria-selected="false" class="nav-link" data-toggle="tab"
+                       href="#new_user"
                        id="new_user-tab" role="tab">New user</a>
                 </li>
 
@@ -159,7 +161,8 @@
                                         </label>
                                         <br/>
                                         <label class="form-label"> Age:
-                                            <input class="form-control" name="age" th:field="*{age}">
+                                            <input class="form-control" name="age" type="number" max="127" min="-128"
+                                                   th:field="*{age}">
                                         </label>
                                         <br/>
                                         <label class="form-label"> Username:
@@ -178,17 +181,14 @@
                                         <span>
                                         <label class="form-label">Roles:
                                         <div class="font-weight-normal">
-                                            <input class="form-check-input pe-1" name="roles" th:each="role : ${defRoles}"
+                                            <input class="form-check-input pe-1" name="roles"
+                                                   th:each="role : ${defRoles}"
                                                    th:field="*{roles}"
                                                    th:id="'role-' + ${role.getId()}"
                                                    th:utext="${'<label class=&quot;form-check-label pe-2&quot; for=&quot;role-'+role.getId()+'&quot;>'+role.getSimpleName()+'</label>'}"
                                                    th:value="${role.id}"
                                                    type="checkbox"
                                             />
-                                            <!--                                            <label class="form-check-label"-->
-                                            <!--                                                   th:for="'role-' + ${role.id}"-->
-                                            <!--                                                   th:text="${role.getSimpleName()}"/>-->
-                                            <!--                                            </input>-->
                                         </div>
                                         </label>
                                         </span>
@@ -205,41 +205,42 @@
                     </table>
                 </div>
 
+            </div>
         </main>
     </div>
 </div>
-<div aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" class="modal fade" id="okModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel2">Выполнено</h5>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body">
-                Изменения сохранены.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-dismiss="modal">Ок</button>
+    <div aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" class="modal fade" id="okModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">Выполнено</h5>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    Изменения сохранены.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-dismiss="modal">Ок</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<iframe name='hidden_frame' src='' style="display: none">
-</iframe>
+    <iframe name='hidden_frame' src='' style="display: none">
+    </iframe>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-
-<script defer src="/res/js/admin.js" th:src="@{../res/js/admin.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 
-<!--<script src="/res/js/bootstrap.bundle.min.js" th:src="@{../res/js/bootstrap.bundle.min.js}" defer></script>-->
-<!--<script src="/res/js/bootstrap.bundle.min.js" th:src="@{../res/js/bootstrap.bundle.min.js}"></script>-->
+    <script defer src="/res/js/admin.js" th:src="@{../res/js/admin.js}"></script>
+
+
+    <!--<script src="/res/js/bootstrap.bundle.min.js" th:src="@{../res/js/bootstrap.bundle.min.js}" defer></script>-->
+    <!--<script src="/res/js/bootstrap.bundle.min.js" th:src="@{../res/js/bootstrap.bundle.min.js}"></script>-->
 </body>
 </html>

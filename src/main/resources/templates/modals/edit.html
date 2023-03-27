@@ -4,73 +4,65 @@
 </head>
 <body>
 <!-- Modal -->
-<div th:fragment="edit(modal_id, id, name, lastName, age, username, password, roles, defRoles)" class="modal fade" th:id="${modal_id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div th:fragment="edit(modal_id, id, name, lastName, age, username, password, roles, defRoles)" class="modal fade"
+     th:id="${modal_id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{admin/edit/{id}(id=${id})}" target="hidden_frame" th:method="PATCH">
+                <div class="modal-body">
+                    <div class="container pt-3 text-center font-weight-bold">
+                        <label class="form-label"> Name:
+                            <input class="form-control" name="name" th:value="${name}">
+                        </label>
+                        <br/>
+                        <label class="form-label"> Lastname:
+                            <input class="form-control" name="lastName" th:value="${lastName}">
+                        </label>
+                        <br/>
+                        <label class="form-label"> Age:
+                            <input class="form-control" type="number" max="127"
+                                   min="-128" name="age" th:value="${age}">
+                        </label>
+                        <br/>
+                        <label class="form-label"> Username:
+                            <input class="form-control" name="username" th:value="${username}">
+                        </label>
+                        <br/>
+                        <label class="form-label"> Password:
+                            <input class="form-control" type="password" name="password" th:value="${password}">
+                        </label>
+                        <br/>
+                        <label class="form-label">Roles:
+                            <div class="font-weight-normal">
+                                <input class="form-check-input pe-1" type="checkbox" name="roles"
+                                       th:each="role : ${defRoles}"
+                                       th:value="${role.getId()}"
+                                       th:id="'role-' + ${role.getId()}"
+                                       th:checked="${#lists.contains(roles, role)}"
+                                       th:utext="${'<label class=&quot;form-check-label pe-2&quot; for=&quot;role-'+role.getId()+'&quot;>'+role.getSimpleName()+'</label>'}"
+                                />
+                                <!--                                            <label class="form-check-label"-->
+                                <!--                                                   th:for="'role-' + ${role.id}"-->
+                                <!--                                                   th:text="${role.getSimpleName()}"/>-->
+                                <!--                                            </input>-->
+                            </div>
+                        </label>
+                        <br/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary save-edit-user" data-bs-target="#okModal"
+                            data-bs-toggle="modal" data-bs-dismiss="modal">Изменить
+                    </button>
+                </div>
+            </form>
         </div>
-
-          <form th:action="@{admin/edit/{id}(id=${id})}" target="hidden_frame" th:method="PATCH">
-        <div class="modal-body">
-          <div class="container pt-3 text-center font-weight-bold">
-
-
-              <label class="form-label"> Name:
-                <input class="form-control" name="name" th:value="${name}">
-              </label>
-              <br/>
-              <label class="form-label"> Lastname:
-                <input class="form-control" name="lastName" th:value="${lastName}">
-              </label>
-              <br/>
-              <label class="form-label"> Age:
-                <input class="form-control" type="number" name="age" th:value="${age}">
-              </label>
-              <br/>
-              <label class="form-label"> Username:
-                <input class="form-control" name="username" th:value="${username}">
-              </label>
-
-              <br/>
-
-              <label class="form-label"> Password:
-                <input class="form-control" type="password" name="password" th:value="${password}">
-              </label>
-
-              <br/>
-
-              <span>
-                                        <label class="form-label">Roles:
-                                        <div class="font-weight-normal">
-                                            <input class="form-check-input pe-1" type="checkbox" name="roles"
-                                                   th:each="role : ${defRoles}"
-                                                   th:value="${role.getId()}"
-                                                   th:id="'role-' + ${role.getId()}"
-                                                   th:checked="${#lists.contains(roles, role)}"
-                                                   th:utext="${'<label class=&quot;form-check-label pe-2&quot; for=&quot;role-'+role.getId()+'&quot;>'+role.getSimpleName()+'</label>'}"
-                                            />
-                                          <!--                                            <label class="form-check-label"-->
-                                          <!--                                                   th:for="'role-' + ${role.id}"-->
-                                          <!--                                                   th:text="${role.getSimpleName()}"/>-->
-                                          <!--                                            </input>-->
-                                        </div>
-                                        </label>
-                                        </span>
-
-
-              <br/>
-
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-primary save-edit-user" data-bs-target="#okModal" data-bs-toggle="modal" data-bs-dismiss="modal"></input>
-        </div>
-      </div>
-        </form>
     </div>
 </div>
 </body>
