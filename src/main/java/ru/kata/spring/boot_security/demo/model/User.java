@@ -73,6 +73,15 @@ public class User implements UserDetails {
         return username;
     }
 
+    public boolean isAdmin() {
+        for (Role role : roles) {
+            if (role.getId() == 1L) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

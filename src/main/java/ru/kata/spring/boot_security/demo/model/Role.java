@@ -12,18 +12,25 @@ public class Role implements GrantedAuthority {
     @Id
     private Long id;
 @Column(name = "name")
-    private String authority;
+    private String name;
 //    @ManyToMany(mappedBy = "roles")
 //    private Set<User> users;
     public Role(){};
+    public Role(String name) {
+        this.name = name;
+    }
 
     @Override
     public String getAuthority() {
-        return authority;
+        return name;
     }
 
     public void setAuthority(String name) {
-        this.authority = name;
+        this.name = name;
+    }
+
+    public String getSimpleName() {
+        return name.substring(5).toLowerCase();
     }
 
 

@@ -40,8 +40,8 @@ public class UsersController {
     public String viewUser(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        if (auth.isAuthenticated()) {
-            model.addAttribute("user", auth.getPrincipal());
-            return "user";
+            model.addAttribute("this_user", auth.getPrincipal());
+            return "new_user";
 //        } else {
 //            model.addAttribute("msg", "А логиниться кто будет???");
 //            return "403";
@@ -53,10 +53,10 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         model.addAttribute("users", userService.getAll());
-
+        model.addAttribute("this_user", (User) auth.getPrincipal());
         model.addAttribute("newUser", new User());
         model.addAttribute("defRoles", roleService.getAll());
-        return "/admin/admin";
+        return "/admin/new_admin";
 
     }
 
@@ -70,6 +70,21 @@ public class UsersController {
         userService.addWithHiddenRoles(newUser);
         httpServletResponse.setStatus(200);
         httpServletResponse.sendRedirect("/admin");
+    }
+
+    @PatchMapping("/admin/edit/{id}")
+    public void newEditUser(HttpServletResponse httpServletResponse,
+                         @PathVariable("id") Long id, @RequestParam("name") String name,
+                         @RequestParam("lastName") String lastName,
+                         @RequestParam("age") Byte age, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam String[] roles) {
+        userService.edit(id, name, lastName, age, username, password, roles);
+        httpServletResponse.setStatus(200);
+    }
+
+    @DeleteMapping("/admin/delete/{id}")
+    public void newDeleteUser(HttpServletResponse httpServletResponse, @PathVariable("id") Long id) throws IOException {
+        userService.delete(id);
+        httpServletResponse.setStatus(200);
     }
 
     @PatchMapping("/admin/edit/")
