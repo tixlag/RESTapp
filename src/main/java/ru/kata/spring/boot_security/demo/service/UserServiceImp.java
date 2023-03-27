@@ -51,13 +51,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void edit(Long id, String name, String lastName, byte age,
-                     String username, String password, String[] roles) {
-
-        Set<Role> rolesEntity = new HashSet<>();
-        for (int i = 0; i < roles.length; i++) {
-            rolesEntity.add(roleDao.get(Long.parseLong(roles[i])));
-        }
-        userDao.edit(id, name, lastName, age, username, password, rolesEntity);
+                     String username, String password, List<Long> roles) {
+        userDao.edit(id, name, lastName, age, username, password, roleDao.getRoleSet(roles));
     }
 
     @Override

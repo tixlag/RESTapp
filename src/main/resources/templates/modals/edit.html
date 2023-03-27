@@ -26,7 +26,7 @@
                         <br/>
                         <label class="form-label"> Age:
                             <input class="form-control" type="number" max="127"
-                                   min="-128" name="age" th:value="${age}">
+                                   min="-128" name="age" th:value="${age == null ? 0 : age}">
                         </label>
                         <br/>
                         <label class="form-label"> Username:
@@ -58,10 +58,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary save-edit-user" data-bs-target="#okModal"
-                            data-bs-toggle="modal" data-bs-dismiss="modal">Изменить
-                    </button>
+                            data-bs-toggle="modal" data-bs-dismiss="modal">Изменить</button>
                 </div>
-            </form>
+        </form>
         </div>
     </div>
 </div>

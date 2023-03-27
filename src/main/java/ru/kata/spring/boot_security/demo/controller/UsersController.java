@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 //@RequestMapping("/users")
@@ -76,7 +77,7 @@ public class UsersController {
     public void newEditUser(HttpServletResponse httpServletResponse,
                          @PathVariable("id") Long id, @RequestParam("name") String name,
                          @RequestParam("lastName") String lastName,
-                         @RequestParam("age") Byte age, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam String[] roles) {
+                         @RequestParam("age") Byte age, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam List<Long> roles) {
         userService.edit(id, name, lastName, age, username, password, roles);
         httpServletResponse.setStatus(200);
     }
@@ -91,7 +92,7 @@ public class UsersController {
     public void editUser(HttpServletResponse httpServletResponse,
                          @RequestParam("user_id") Long id, @RequestParam("name") String name,
                            @RequestParam("last_name") String lastName,
-                           @RequestParam("age") Byte age, @RequestParam String username, @RequestParam String password, @RequestParam String[] roles) {
+                           @RequestParam("age") Byte age, @RequestParam String username, @RequestParam String password, @RequestParam List<Long> roles) {
         userService.edit(id, name, lastName, age, username, password, roles);
         httpServletResponse.setStatus(200);
     }

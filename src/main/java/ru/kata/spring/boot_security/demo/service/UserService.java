@@ -16,7 +16,7 @@ public interface UserService extends UserDetailsService {
     void edit(User user);
 
     void edit(Long id, String name, String lastName, byte age,
-              String username, String password, String[] roles);
+              String username, String password, List<Long> roles);
 
     void delete(Long id);
 

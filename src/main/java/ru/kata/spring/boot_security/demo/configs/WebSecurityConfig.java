@@ -27,14 +27,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // TODO подключить csrf к формам
                 .csrf().disable()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/", "/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/").hasAnyRole("ADMIN, USER")
-                .antMatchers("/", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
