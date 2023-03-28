@@ -11,8 +11,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -40,13 +38,8 @@ public class UsersController {
     @GetMapping("/user")
     public String viewUser(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth.isAuthenticated()) {
             model.addAttribute("this_user", auth.getPrincipal());
             return "new_user";
-//        } else {
-//            model.addAttribute("msg", "А логиниться кто будет???");
-//            return "403";
-//        }
     }
 
     @GetMapping("/admin")
@@ -60,8 +53,6 @@ public class UsersController {
         return "/admin/new_admin";
 
     }
-
-    // ??? @RequestBody не работает у меня никак
 
     @PostMapping("/admin/new")
     public void addUser(HttpServletResponse httpServletResponse,
@@ -90,7 +81,7 @@ public class UsersController {
 
     @PatchMapping("/admin/edit/")
     public void editUser(HttpServletResponse httpServletResponse,
-                         @RequestParam("user_id") Long id, @RequestParam("name") String name,
+                             @RequestParam("user_id") Long id, @RequestParam("name") String name,
                            @RequestParam("last_name") String lastName,
                            @RequestParam("age") Byte age, @RequestParam String username, @RequestParam String password, @RequestParam List<Long> roles) {
         userService.edit(id, name, lastName, age, username, password, roles);
@@ -101,16 +92,8 @@ public class UsersController {
     public void deleteUser(HttpServletResponse httpServletResponse, @RequestParam("user_id") Long id) throws IOException {
         userService.delete(id);
         httpServletResponse.setStatus(200);
-//        httpServletResponse.sendRedirect("/admin");
-//        return "redirect:/admin";
     }
 
-    // @ModelAttribute получает пустого юзера.
-    // В js 79 строка. По разному пробовал - не выходит
-    @PatchMapping("/admin/edit2/")
-    public String editUserr(@ModelAttribute User user, @RequestParam String[] roles) {
-        userService.edit(user);
-        return "redirect:/admin";
-    }
+
 
 }

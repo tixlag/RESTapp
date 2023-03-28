@@ -8,15 +8,17 @@ import java.util.Set;
 
 public interface UserDao {
     void add(User user);
-    User get(int id);
+    User get(Long id);
     List<User> getAll();
-    void edit(Long id, User user);
+
     void edit(Long id, String name, String lastName, byte age,
               String username, String password, Set<Role> roles);
+
+    void edit(User user);
 
     void delete(Long id);
 
     User getByName(String name);
 
-    void edit(User user);
+
 }

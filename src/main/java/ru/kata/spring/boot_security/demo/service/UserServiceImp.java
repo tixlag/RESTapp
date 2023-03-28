@@ -35,7 +35,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User get(int id) {
+    public User get(Long id) {
         return userDao.get(id);
     }
 
@@ -52,6 +52,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void edit(Long id, String name, String lastName, byte age,
                      String username, String password, List<Long> roles) {
+
         userDao.edit(id, name, lastName, age, username, password, roleDao.getRoleSet(roles));
     }
 
@@ -67,16 +68,25 @@ public class UserServiceImp implements UserService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь не существует.");
         }
-
+        // Обман ленивой загрузки
+        getRoles(user.get());
         return user.get();
     }
 
+    @Override
     public void addWithHiddenRoles(User user) {
-        Set<Role> rolesEntity = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            rolesEntity.add(roleDao.get(Long.parseLong(role.getAuthority())));
-        }
-        user.setRoles(rolesEntity);
-        add(user);
+            Set<Role> rolesEntity = new HashSet<>();
+            for (Role role : user.getRoles()) {
+                rolesEntity.add(roleDao.get(Long.parseLong(role.getAuthority())));
+            }
+            user.setRoles(rolesEntity);
+            add(user);
+    }
+
+    //    Как я обманул ленивую загрузку...
+    @Override
+    public void getRoles(User user) {
+        Set<Role> roles = user.getRoles();
+        roles.size();
     }
 }

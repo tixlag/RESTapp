@@ -1,17 +1,15 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService extends UserDetailsService {
 
     void add(User user);
     void addWithHiddenRoles(User user);
-    User get(int id);
+    User get(Long id);
     List<User> getAll();
     void edit(User user);
 
@@ -20,5 +18,6 @@ public interface UserService extends UserDetailsService {
 
     void delete(Long id);
 
-
+    //    Как я обманул ленивую загрузку...
+    void getRoles(User user);
 }

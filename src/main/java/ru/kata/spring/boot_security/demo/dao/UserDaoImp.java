@@ -22,7 +22,7 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public User get(int id) {
+    public User get(Long id) {
 //        return manager.getObject() .createQuery("from User", User.class).getSingleResult();
         return manager.find(User.class, id);
     }
@@ -32,10 +32,7 @@ public class UserDaoImp implements UserDao {
         return manager.createQuery("from User", User.class).getResultList();
     }
 
-    @Override
-    public void edit(Long id, User user) {
 
-    }
 
     @Override
     public void edit(Long id, String name, String lastName, byte age,
