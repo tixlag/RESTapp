@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
 
     //    Как я обманул ленивую загрузку...
     void getRoles(User user);
+
+    void firstRun();
 }

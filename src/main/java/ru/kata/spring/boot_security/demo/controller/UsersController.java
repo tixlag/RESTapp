@@ -32,6 +32,8 @@ public class UsersController {
 
     @GetMapping("/")
     public String index() {
+        userService.firstRun();
+
         return "index";
     }
 

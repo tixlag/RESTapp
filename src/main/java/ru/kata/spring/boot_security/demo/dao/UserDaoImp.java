@@ -42,7 +42,9 @@ public class UserDaoImp implements UserDao {
         currentUser.setLastName(lastName);
         currentUser.setAge(age);
         currentUser.setUsername(username);
-        currentUser.setPassword(password);
+        if (password != null) {
+            currentUser.setPassword(password);
+        }
         currentUser.setRoles(roles);
     }
 
@@ -57,9 +59,9 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public User getByName(String name) {
+    public List<User> getByName(String name) {
         TypedQuery<User> query = manager.createQuery("from User where username=:name", User.class);
         query.setParameter("name", name);
-        return query.getSingleResult();
+        return query.getResultList();
     }
 }
