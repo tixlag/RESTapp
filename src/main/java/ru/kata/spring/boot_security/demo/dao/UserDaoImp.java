@@ -4,10 +4,10 @@ import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -59,9 +59,23 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public List<User> getByName(String name) {
+    public Optional<User> getByUsername(String name) {
         TypedQuery<User> query = manager.createQuery("from User where username=:name", User.class);
         query.setParameter("name", name);
-        return query.getResultList();
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException ignore) {
+            return Optional.empty();
+        }
     }
+
+//    @Override
+//    public boolean isFind(String name) {
+//        // ну а как еще? В javax.persistence
+//        // нет ни для Query ни для Manager подходящих методов
+//        // Я же не по ключю смотрю.
+//        Query query = manager.createQuery("from User where username=:name");
+//        query.setParameter("name", name);
+//        return !query.getResultList().isEmpty();
+//    }
 }

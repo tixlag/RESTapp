@@ -18,8 +18,5 @@ public interface UserService extends UserDetailsService {
 
     void delete(Long id);
 
-    //    Как я обманул ленивую загрузку...
-    void getRoles(User user);
-
     void firstRun();
 }
