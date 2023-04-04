@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -35,42 +36,36 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void add(User user) {
-        // Если такого юзернэйма нет, то добавляем
-        if (userDao.getByUsername(user.getUsername()).isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userDao.add(user);
-        } else {
-            throw new UserExistException("Username is busy");
-        }
-
-    }
-
-    @Override
-    public User get(Long id) {
-        return userDao.get(id);
-    }
-
-    @Override
     public List<User> getAll() {
         return userDao.getAll();
     }
 
     @Override
-    public void edit(User user) {
-        userDao.edit(user);
+    public void editRest(User user) {
+        Optional<User> curUser = userDao.getByUsername(user.getUsername());
+        if (curUser.isEmpty() || curUser.get().getId().equals(user.getId())) {
+            user.setPassword(user.getPassword() == null
+                    ? userDao.get(user.getId()).getPassword()
+                    : passwordEncoder.encode(user.getPassword()));
+            extractEntityRoles(user);
+            userDao.edit(user);
+        } else {
+            throw new UserExistException("Username is busy.");
+        }
+
     }
 
     @Override
-    public void edit(Long id, String name, String lastName, byte age,
-                     String username, String password, List<Long> roles) {
-        Optional<User> user = userDao.getByUsername(username);
-        if (user.isEmpty() || user.get().getId().equals(id)) {
-            editValidUser(id, name, lastName, age, username, password, roles);
+    public void addRest(User user) {
+        // Если такого юзернэйма нет, то добавляем
+        if (userDao.getByUsername(user.getUsername()).isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            extractEntityRoles(user);
+            userDao.add(user);
         } else {
-            throw new UserExistException("Username is busy.");
-
+            throw new UserExistException("Username is busy");
         }
+
     }
 
     @Override
@@ -90,26 +85,9 @@ public class UserServiceImp implements UserService {
         return user.get();
     }
 
-    @Override
-    public void addWithHiddenRoles(User user) {
-            Set<Role> rolesEntity = new HashSet<>();
-            for (Role role : user.getRoles()) {
-                rolesEntity.add(roleDao.get(Long.parseLong(role.getAuthority())));
-            }
-            user.setRoles(rolesEntity);
-            add(user);
-    }
-
-    public void firstRun() {
-        add(new User(null, "name", "lastName", (byte) 10, "nadmin", "nadmin", roleDao.getAll()));
-    }
-
-    public void editValidUser(Long id, String name, String lastName, byte age,
-                              String username, String password, List<Long> roles) {
-        if (password != null) {
-            password = passwordEncoder.encode(password);
-        }
-
-        userDao.edit(id, name, lastName, age, username, password, roleDao.getRoleSet(roles));
+    private void extractEntityRoles(User user) {
+        user.setRoles(user.getRoles().stream()
+                .map(x -> roleDao.getByName(x.getAuthority()))
+                .collect(Collectors.toSet()));
     }
 }

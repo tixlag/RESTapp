@@ -10,5 +10,7 @@ public interface RoleDao {
 
     Role get(Long id);
 
+    Role getByName(String name);
+
     Set<Role> getRoleSet(List<Long> roles);
 }

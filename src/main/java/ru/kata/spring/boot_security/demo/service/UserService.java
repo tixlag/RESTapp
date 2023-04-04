@@ -7,16 +7,12 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    void add(User user);
-    void addWithHiddenRoles(User user);
-    User get(Long id);
     List<User> getAll();
-    void edit(User user);
 
-    void edit(Long id, String name, String lastName, byte age,
-              String username, String password, List<Long> roles);
+    void addRest(User user);
+
+    void editRest(User user);
 
     void delete(Long id);
 
-    void firstRun();
 }
