@@ -7,13 +7,13 @@ import java.util.Set;
 public class UserDTO {
 
     private Long id;
-    @NotEmpty
+//    @NotEmpty
     private String username;
     private String password;
     private String name;
     private String lastName;
     private Byte age;
-    @NotNull
+//    @NotNull
     private Set<RoleDTO> roles;
 
     public Long getId() {

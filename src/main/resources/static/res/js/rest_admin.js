@@ -9,9 +9,11 @@ $('#myTab a').on('click', function (e) {
     const roles = ["admin", "user"];
     const authority = ["ROLE_ADMIN", "ROLE_USER"];
 
-    const getUsersUrl = "/rest/admin";
-    const editUserUrl = "/rest/admin/edit"
-    const removeUserUrl = "/rest/admin/delete/"
+    const getUsersUrl = "/api/admin";
+    const editUserUrl = "/api/admin"
+    const removeUserUrl = "/api/admin/"
+
+    const newUserTab = $("#new_user");
 
     const editModal = $("#editUser");
     const rolesPlaceEditModal = $(".roles-edit-label");
@@ -43,11 +45,11 @@ $('#myTab a').on('click', function (e) {
 
             let newUser = {
                 id: id,
-                name: $("#editUser input[name=name]").val(),
-                lastName: $("#editUser input[name=lastName]").val(),
-                age: $("#editUser input[name=age]").val(),
-                username: $("#editUser input[name=username]").val(),
-                password: $("#editUser input[name=password]").val(),
+                name: editModal.find("input[name=name]").val(),
+                lastName: editModal.find("input[name=lastName]").val(),
+                age: editModal.find("input[name=age]").val(),
+                username: editModal.find("input[name=username]").val(),
+                password: editModal.find("input[name=password]").val(),
                 roles: newRoles
             }
             let response = await fetch(editUserUrl, {
@@ -62,7 +64,7 @@ $('#myTab a').on('click', function (e) {
                 editModal.modal('hide');
                 this.removeEventListener("click", editUser);
             } else {
-                $("#editUser input[name=username]").addClass("has-error")
+                editModal.find("input[name=username]").addClass("is-invalid")
             }
         };
     }
@@ -199,40 +201,44 @@ $('#myTab a').on('click', function (e) {
 
 
         for (let i = 0; i < roles.length; i++) {
-            $(".roles-label").append("<label class='font-weight-normal form-check-label pe-2' " +
+            newUserTab.find(".roles-label").append("<label class='font-weight-normal form-check-label pe-2' " +
                 "for='role-" + (i + 1) + "'>" + roles[i] + "</label>")
                 .append("<input class='form-check-input px-1' type='checkbox' id='role-" + (i + 1) + "'>");
         }
 
-        $(".btn-add-user")[0].addEventListener("click", async function (e) {
+        newUserTab.find(".btn-add-user")[0].addEventListener("click", async function (e) {
             e.preventDefault();
             //
             let new_roles = [];
             for (let i = 0; i < roles.length; i++) {
                 if ($("#role-" + (i + 1)).is(":checked")) {
                     new_roles.push({
-                        authority: "ROLE_" + roles[i].toUpperCase(),
+                        authority: authority[i],
                     });
                 }
             }
 
             let user = {
-                name: $("input[name=name]").val(),
-                lastName: $("input[name=lastName]").val(),
-                age: $("input[name=age]").val(),
-                username: $("input[name=username]").val(),
-                password: $("input[name=password]").val(),
+                name: newUserTab.find("input[name=name]").val(),
+                lastName: newUserTab.find("input[name=lastName]").val(),
+                age: newUserTab.find("input[name=age]").val(),
+                username: newUserTab.find("input[name=username]").val(),
+                password: newUserTab.find("input[name=password]").val(),
                 roles: new_roles
             }
-            let response = await fetch('/rest/new_user', {
+            let response = await fetch('/api/admin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(user)
             });
-            addUserRow(user)
-            $('#myTab a[href="#users_table"]').tab('show')
+            if (response.ok) {
+                addUserRow(user)
+                $('#myTab a[href="#users_table"]').tab('show')
+            } else {
+                newUserTab.find("input[name=username]").addClass("is-invalid");
+            }
 
         });
     }

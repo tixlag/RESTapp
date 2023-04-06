@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.util;
 
 public class UserResponseError {
+
     private String message;
 
     public UserResponseError(String message) {
@@ -15,3 +16,4 @@ public class UserResponseError {
         this.message = message;
     }
 }
+

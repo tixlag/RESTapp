@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.util.ConverterDTO;
 import ru.kata.spring.boot_security.demo.util.UserExistException;
 import ru.kata.spring.boot_security.demo.util.UserResponseError;
 
@@ -19,68 +20,55 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/rest/")
+@RequestMapping("/api/")
 public class AdminRestController {
 
     private final
     UserService userService;
-    private final ModelMapper modelMapper;
+    private final ConverterDTO converterDTO;
 
     @Autowired
-    public AdminRestController(UserService userService, ModelMapper modelMapper) {
+    public AdminRestController(UserService userService, ConverterDTO converterDTO) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
+        this.converterDTO = converterDTO;
     }
 
     @GetMapping("/user")
-    public UserDTO viewUser() {
+    public ResponseEntity<UserDTO> viewUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        user.setPassword(null);
-        return modelMapper.map(user, UserDTO.class);
+        user.setPassword("");
+        return new ResponseEntity<>(converterDTO.converToUserDTO(user), HttpStatus.OK);
     }
 
     @GetMapping("/admin")
     public ResponseEntity<Map<String, Object>> adminPanel() {
         Map<String, Object> response = new HashMap<>();
 
-        UserDTO thisUser = converToUserDTO(
+        UserDTO thisUser = converterDTO.converToUserDTO(
                 (User) SecurityContextHolder.getContext().
-                getAuthentication().getPrincipal());
+                        getAuthentication().getPrincipal());
         response.put("this_user", thisUser);
 
-        List<UserDTO> usersDTO = userService.getAll().stream().map(this::converToUserDTO).collect(Collectors.toList());
+        List<UserDTO> usersDTO = userService.getAll().stream().map(converterDTO::converToUserDTO).collect(Collectors.toList());
         response.put("users", usersDTO);
+        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return responseEntity;
     }
 
-    @PostMapping("/admin/new_user")
+    @PostMapping("/admin")
     public void addUser(@RequestBody UserDTO userDTO) {
-        userService.addRest(converToUser(userDTO));
+        userService.addRest(converterDTO.converToUser(userDTO));
     }
 
-    @PatchMapping("/admin/edit")
+    @PatchMapping("/admin")
     public void editUser(@RequestBody UserDTO userDTO) {
-        userService.editRest((converToUser(userDTO)));
+        userService.editRest(converterDTO.converToUser(userDTO));
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/{id}")
     public void newDeleteUser(HttpServletResponse httpServletResponse, @PathVariable("id") Long id) {
         userService.delete(id);
         httpServletResponse.setStatus(200);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<UserResponseError> handleExceprion(UserExistException e) {
-        UserResponseError response = new UserResponseError(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    private User converToUser(UserDTO userDTO) {
-        return modelMapper.map(userDTO, User.class);
-    }
-
-    private UserDTO converToUserDTO(User user) {
-        return modelMapper.map(user, UserDTO.class);
     }
 }

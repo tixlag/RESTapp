@@ -1,6 +1,6 @@
-let getUserUrl = "/rest/user";
+let getUserUrl = "/api/user";
 async function getUser(url) {
-    let response = await fetch("/rest/user");
+    let response = await fetch(url);
     let user = await response.json();
 
     $(".name").text(user.name);
