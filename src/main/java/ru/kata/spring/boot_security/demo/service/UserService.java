@@ -9,10 +9,10 @@ public interface UserService extends UserDetailsService {
 
     List<User> getAll();
 
-    void addRest(User user);
+    User addUser(User user);
 
-    void editRest(User user);
+    void editUser(User user);
 
-    void delete(Long id);
+    void deleteUser(Long id);
 
 }

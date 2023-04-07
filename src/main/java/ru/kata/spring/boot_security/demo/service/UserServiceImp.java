@@ -41,7 +41,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void editRest(User user) {
+    public void editUser(User user) {
         Optional<User> curUser = userDao.getByUsername(user.getUsername());
         if (curUser.isEmpty() || curUser.get().getId().equals(user.getId())) {
             user.setPassword(user.getPassword() == null
@@ -56,12 +56,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void addRest(User user) {
+    public User addUser(User user) {
         // Если такого юзернэйма нет, то добавляем
         if (userDao.getByUsername(user.getUsername()).isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             extractEntityRoles(user);
-            userDao.add(user);
+            User newUser = userDao.add(user);
+            return newUser;
         } else {
             throw new UserExistException("Username is busy");
         }
@@ -69,7 +70,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         userDao.delete(id);
     }
 

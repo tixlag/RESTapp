@@ -49,6 +49,7 @@
 
                                 <thead class="table-light">
                                 <tr>
+                                    <th scope="col">id</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">LastName</th>
                                     <th scope="col">Age</th>
@@ -57,12 +58,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="user_row">
-                                    <td class="name"></td>
-                                    <td class="last_name"></td>
-                                    <td class="age"></td>
-                                    <td class="username"></td>
-                                    <td style="align:center" class="roles_cell"></td>
+                                <tr>
+                                    <td class="user_id" th:text="${#authentication.getPrincipal().getId()}">id</td>
+                                    <td class="name" th:text="${#authentication.getPrincipal().getName()}">
+                                        model
+                                    </td>
+                                    <td class="last_name"
+                                        th:text="${#authentication.getPrincipal().getLastName()}">series
+                                    </td>
+                                    <td class="age" th:text="${#authentication.getPrincipal().getAge()}">series
+                                    </td>
+                                    <td class="username"
+                                        th:text="${#authentication.getPrincipal().getUsername()}">
+                                        series
+                                    </td>
+
+
+                                    <td style="align:center" class="roles_cell">
+
+                                                <span
+                                                        th:each="role, itemStat : ${#authentication.getAuthorities()}"
+                                                        th:text="${itemStat.last ? role.getSimpleName() : role.getSimpleName() + ', '}"
+                                                />
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

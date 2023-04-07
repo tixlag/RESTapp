@@ -229,7 +229,12 @@ $('#myTab a').on('click', function (e) {
                 body: JSON.stringify(user)
             });
             if (response.ok) {
-                addUserRow(user)
+                let new_user = await response.json();
+                if(new_user.id != null) {
+                    user = new_user;
+                    users.push(user);
+                }
+                addUserRow(user);
                 $('#myTab a[href="#users_table"]').tab('show')
             } else {
                 newUserTab.find("input[name=username]").addClass("is-invalid");
@@ -241,7 +246,6 @@ $('#myTab a').on('click', function (e) {
     // util-функции
     async function getUsers(url) {
         let response = await fetch(url);
-        let parseResp = await response.json();
-        return parseResp;
+        return await response.json();
     }
 })();

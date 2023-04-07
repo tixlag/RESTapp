@@ -74,12 +74,7 @@ public class User implements UserDetails {
     }
 
     public boolean isAdmin() {
-        for (Role role : roles) {
-            if (role.getId() == 1L) {
-                return true;
-            }
-        }
-        return false;
+        return roles.stream().anyMatch(x->x.getAuthority().equals("ROLE_ADMIN"));
     }
 
     @Override

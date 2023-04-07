@@ -17,8 +17,9 @@ public class UserDaoImp implements UserDao {
 
 
     @Override
-    public void add(User user) {
+    public User add(User user) {
         manager.persist(user);
+        return user;
     }
 
     @Override

@@ -24,13 +24,12 @@ public class UsersController {
     }
 
     @GetMapping("/user")
-    public String viewUser() {
+    public String userPanel() {
         return "rest_user";
     }
 
     @GetMapping("/admin")
-    public String adminPanel(Authentication auth, ModelMap model) {
-        model.put("user", auth.getPrincipal());
+    public String adminPanel() {
         return "/admin/rest_admin";
     }
 

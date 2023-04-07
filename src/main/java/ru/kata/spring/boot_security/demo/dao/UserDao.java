@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface UserDao {
-    void add(User user);
+    User add(User user);
     User get(Long id);
     List<User> getAll();
 
