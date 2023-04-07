@@ -15,6 +15,6 @@ public class ExceptionController {
     @ExceptionHandler(UserExistException.class)
     public ResponseEntity<UserResponseError> handleException(UserExistException e) {
         UserResponseError response = new UserResponseError(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.badRequest().body(response);
     }
 }

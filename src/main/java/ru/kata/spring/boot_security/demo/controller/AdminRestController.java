@@ -33,41 +33,32 @@ public class AdminRestController {
         this.converterDTO = converterDTO;
     }
 
+    // Этот метод типа вообще не нужен? Страницу /user/ Таймлифом заполнять? #authentication.getP
     @GetMapping("/user")
-    public ResponseEntity<UserDTO> viewUser() {
+    public ResponseEntity<UserDTO> getUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         user.setPassword("");
-        return new ResponseEntity<>(converterDTO.converToUserDTO(user), HttpStatus.OK);
+        return ResponseEntity.ok(converterDTO.converToUserDTO(user));
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<Map<String, Object>> adminPanel() {
-        Map<String, Object> response = new HashMap<>();
-
-        UserDTO thisUser = converterDTO.converToUserDTO(
-                (User) SecurityContextHolder.getContext().
-                        getAuthentication().getPrincipal());
-        response.put("this_user", thisUser);
-
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> usersDTO = userService.getAll().stream().map(converterDTO::converToUserDTO).collect(Collectors.toList());
-        response.put("users", usersDTO);
-        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
-
-        return responseEntity;
+        return ResponseEntity.ok(usersDTO);
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/admin/users")
     public void addUser(@RequestBody UserDTO userDTO) {
         userService.addRest(converterDTO.converToUser(userDTO));
     }
 
-    @PatchMapping("/admin")
+    @PatchMapping("/admin/users")
     public void editUser(@RequestBody UserDTO userDTO) {
         userService.editRest(converterDTO.converToUser(userDTO));
     }
 
-    @DeleteMapping("/admin/{id}")
-    public void newDeleteUser(HttpServletResponse httpServletResponse, @PathVariable("id") Long id) {
+    @DeleteMapping("/admin/users/{id}")
+    public void deleteUser(HttpServletResponse httpServletResponse, @PathVariable("id") Long id) {
         userService.delete(id);
         httpServletResponse.setStatus(200);
     }

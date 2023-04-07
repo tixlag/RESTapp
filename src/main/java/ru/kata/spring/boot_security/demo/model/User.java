@@ -57,11 +57,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User(String name, String lastName, byte age) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -27,14 +29,9 @@ public class UsersController {
     }
 
     @GetMapping("/admin")
-    public String adminPanel() {
+    public String adminPanel(Authentication auth, ModelMap model) {
+        model.put("user", auth.getPrincipal());
         return "/admin/rest_admin";
     }
 
-//    @GetMapping("/")
-//    public String index() {
-//        userService.firstRun();
-//
-//        return "index";
-//    }
 }

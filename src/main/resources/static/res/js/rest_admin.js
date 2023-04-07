@@ -9,9 +9,7 @@ $('#myTab a').on('click', function (e) {
     const roles = ["admin", "user"];
     const authority = ["ROLE_ADMIN", "ROLE_USER"];
 
-    const getUsersUrl = "/api/admin";
-    const editUserUrl = "/api/admin"
-    const removeUserUrl = "/api/admin/"
+    const apiAdminUrl = "/api/admin/users";
 
     const newUserTab = $("#new_user");
 
@@ -24,10 +22,7 @@ $('#myTab a').on('click', function (e) {
     const submitRemoveButton = $(".remove-user")[0];
 
 
-    const parseUsersResp = await getUsers(getUsersUrl);
-
-    const this_user = parseUsersResp.this_user;
-    const users = parseUsersResp.users;
+    const users = await getUsers(apiAdminUrl);
 
     initPage();
 
@@ -52,7 +47,7 @@ $('#myTab a').on('click', function (e) {
                 password: editModal.find("input[name=password]").val(),
                 roles: newRoles
             }
-            let response = await fetch(editUserUrl, {
+            let response = await fetch(apiAdminUrl, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -71,7 +66,7 @@ $('#myTab a').on('click', function (e) {
 
     function submitRemoveUser(id) {
         return async function removeUser() {
-            let response = await fetch(removeUserUrl + id, {
+            let response = await fetch(apiAdminUrl + "/" + id, {
                 method: 'DELETE',
             });
             if (response.status === 200) {
@@ -176,7 +171,7 @@ $('#myTab a').on('click', function (e) {
 
     // Инициализация страницы
     function initPage() {
-        initHeadAndBar();
+        // initHeadAndBar();
         initBody();
         initNewUserTab();
     }
@@ -226,7 +221,7 @@ $('#myTab a').on('click', function (e) {
                 password: newUserTab.find("input[name=password]").val(),
                 roles: new_roles
             }
-            let response = await fetch('/api/admin', {
+            let response = await fetch(apiAdminUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'

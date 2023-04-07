@@ -1,34 +1,39 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Демо Bootstrap</title>
     <!--    <link rel="stylesheet" type="text/css" href="/res/css/bootstrap.min.css" th:href="@{../res/css/bootstrap.min.css}"-->
     <!--          media="all">-->
-    <link media="all" rel="stylesheet" th:href="@{../res/css/new_admin.css}" type="text/css">
-    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{../res/css/new_admin.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 <header class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand"></a>
+        <a class="navbar-brand"><b th:text="${#authentication.getName()}"></b>
+            with roles: <span th:each="role, itemStat : ${#authentication.getAuthorities()}"
+                              th:text="${itemStat.last} ? ${role.getSimpleName()} : ${role.getSimpleName()} + ', '"></span></a>
         <a class="nav-link navbar-nav" th:text="logout" th:href="@{/logout}"></a>
     </div>
 </header>
 <div class="container-fluid bg-light">
     <div class="row flex-xl-nowrap">
-        <div class="bd-sidebar pt-3 col-12 col-md-3 col-xl-2 bg-white">
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <!--            TODO Сделать ссылки на editUser-->
-                    <a href="#" data-bs-toggle="modal" class="nav-link active user_link">
+        <div class="row flex-xl-nowrap">
+            <div class="bd-sidebar pt-3 col-12 col-md-3 col-xl-2 bg-white">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <!--            TODO Сделать ссылки на editUser-->
+                        <a href="#"
+                           class="nav-link active"
+                           th:text="${#authentication.name}">
 
-                    </a>
-                </li>
-            </ul>
-        </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main" style="padding-left: 30px">
             <h1 class="bd-title" th:text="'Admin panel'"></h1>
 
@@ -233,9 +238,7 @@
     </div>
 </div>
 
-</body>
 
-</body>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script crossorigin="anonymous"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,22 +13,27 @@
 <body>
 <header class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand"></a>
+        <a class="navbar-brand"><b th:text="${#authentication.getName()}"></b>
+            with roles: <span th:each="role, itemStat : ${#authentication.getAuthorities()}"
+                              th:text="${itemStat.last} ? ${role.getSimpleName()} : ${role.getSimpleName()} + ', '"></span></a>
         <a class="nav-link navbar-nav" th:text="logout" th:href="@{/logout}"></a>
     </div>
 </header>
 <div class="container-fluid bg-light">
     <div class="row flex-xl-nowrap">
-        <div class="bd-sidebar pt-3 col-12 col-md-3 col-xl-2 bg-white">
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <!--            TODO Сделать ссылки на editUser-->
-                    <a href="#" data-bs-toggle="modal" class="nav-link active user_link">
+        <div class="row flex-xl-nowrap">
+            <div class="bd-sidebar pt-3 col-12 col-md-3 col-xl-2 bg-white">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <!--            TODO Сделать ссылки на editUser-->
+                        <a href="#"
+                           class="nav-link active"
+                           th:text="${#authentication.name}">
 
-                    </a>
-                </li>
-            </ul>
-        </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" style="padding-left: 30px" role="main">
             <h1 class="bd-title" th:text="'User information page'"></h1>
 
