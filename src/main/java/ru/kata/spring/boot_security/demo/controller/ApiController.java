@@ -4,32 +4,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
-import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.ConverterDTO;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin/users")
-public class AdminRestController {
+public class ApiController {
 
     private final
     UserService userService;
     private final ConverterDTO converterDTO;
 
     @Autowired
-    public AdminRestController(UserService userService, ConverterDTO converterDTO) {
+    public ApiController(UserService userService, ConverterDTO converterDTO) {
         this.userService = userService;
         this.converterDTO = converterDTO;
     }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> usersDTO = userService.getAll().stream().map(converterDTO::converToUserDTO).collect(Collectors.toList());
+        List<UserDTO> usersDTO = userService.getAll()
+                .stream()
+                .map(converterDTO::converToUserDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(usersDTO);
     }
 

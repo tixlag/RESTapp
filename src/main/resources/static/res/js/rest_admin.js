@@ -22,7 +22,7 @@ $('#myTab a').on('click', function (e) {
     const submitRemoveButton = $(".remove-user")[0];
 
 
-    const users = await getUsers(apiAdminUrl);
+    const users = await getAllUsers(apiAdminUrl);
 
     initPage();
 
@@ -188,7 +188,6 @@ $('#myTab a').on('click', function (e) {
     function initBody() {
         for (let user of users) {
             addUserRow(user);
-
         }
     }
 
@@ -244,7 +243,7 @@ $('#myTab a').on('click', function (e) {
     }
 
     // util-функции
-    async function getUsers(url) {
+    async function getAllUsers(url) {
         let response = await fetch(url);
         return await response.json();
     }
